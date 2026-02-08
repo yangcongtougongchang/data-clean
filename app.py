@@ -1036,30 +1036,31 @@ def render_sidebar():
         st.caption(f"👤 会话ID: {USER_ID}")
 
 def render_footer():
-    """简洁版页脚 - 修复版"""
-    
+    """简洁版页脚 - 渐变背景版"""
+
     footer_content = """
     <style>
     .simple-footer {
         text-align: center;
         padding: 20px;
         margin-top: 40px;
-        background: #f5f7fa;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 10px;
-        border-top: 2px solid #ff2442;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: white;
     }
-    
+
     .footer-title {
         font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 10px;
-        color: #1a1a2e;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
-    
+
     .xh-box {
         display: inline-block;
-        background: #ff2442;
+        background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
         color: white !important;
         padding: 8px 16px;
         border-radius: 6px;
@@ -1067,54 +1068,59 @@ def render_footer():
         margin: 10px 0;
         font-weight: bold;
         transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(255, 36, 66, 0.3);
     }
-    
+
     .xh-box:hover {
-        background: #e0203c;
         transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(255, 36, 66, 0.4);
     }
-    
+
     .footer-text {
-        color: #666;
+        color: rgba(255, 255, 255, 0.9);
         margin: 15px 0;
         font-size: 0.9rem;
     }
-    
+
     .copyright {
-        color: #888;
+        color: rgba(255, 255, 255, 0.7);
         font-size: 0.8rem;
         margin-top: 15px;
         line-height: 1.6;
     }
-    
+
     .copyright a {
-        color: #ff2442;
+        color: #ffd700;
         text-decoration: none;
+        font-weight: bold;
+    }
+
+    .copyright a:hover {
+        text-decoration: underline;
     }
     </style>
-    
+
     <div class="simple-footer">
         <div class="footer-title">🏭 洋葱头工厂</div>
-        
+
         <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="xh-box">
             📕 小红书：750922641
         </a>
-        
+
         <p class="footer-text">专注 AI 工具与数据智能 · 关注获取更多实用技巧</p>
-        
+
         <div class="copyright">
             © 2023 SmartClean · 设计 by 
             <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank">
                 洋葱头工厂
             </a>
             <br>
-            <span style="font-size: 0.75rem;">本地化处理 · 隐私安全 · 零基础友好</span>
+            <span style="font-size: 0.75rem; opacity: 0.8;">本地化处理 · 隐私安全 · 零基础友好</span>
         </div>
     </div>
     """
-    
+
     st.markdown("---")
-    # 使用 components_html 完整渲染，高度自适应
     components_html(footer_content, height=250, scrolling=False)
 
 
@@ -1135,6 +1141,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
