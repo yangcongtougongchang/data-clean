@@ -985,157 +985,81 @@ def render_sidebar():
         st.caption(f"👤 会话ID: {USER_ID}")
 
 def render_footer():
-    """渲染页脚和引流标识 - 简洁小红书引流版"""
+    """简洁版页脚"""
     
-    # Streamlit 页脚CSS样式
-    footer_css = """
+    css = """
     <style>
-    /* 简洁引流页脚样式 */
-    .sticky-footer {
-        position: relative;
-        margin-top: 40px;
-        padding: 25px 0 20px;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        color: #f8f9fa;
-        border-top: 3px solid #ff2442;
-        border-radius: 12px 12px 0 0;
-        width: 100%;
-    }
-    
-    .footer-content {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 0 20px;
+    .simple-footer {
         text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+        background: #f5f7fa;
+        border-radius: 10px;
+        border-top: 2px solid #ff2442;
     }
     
-    .brand-info {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 15px;
-    }
-    
-    .brand-title {
+    .footer-title {
         font-size: 1.5rem;
-        font-weight: 600;
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .xh-link {
-        background: rgba(255, 36, 66, 0.15);
-        border-radius: 8px;
-        padding: 8px 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        color: white;
-        border: 1px solid rgba(255, 36, 66, 0.3);
-        transition: all 0.3s ease;
-        font-weight: 500;
-    }
-    
-    .xh-link:hover {
-        background: rgba(255, 36, 66, 0.25);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(255, 36, 66, 0.2);
-    }
-    
-    .account-id {
-        font-family: 'Courier New', monospace;
         font-weight: bold;
-        font-size: 1.1rem;
-        color: #ffcdd2;
+        margin-bottom: 10px;
+        color: #1a1a2e;
     }
     
-    .footer-description {
-        color: #b0b7c3;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        max-width: 600px;
-        margin: 0 auto 15px;
-    }
-    
-    .footer-bottom {
-        margin-top: 15px;
-        padding-top: 15px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        color: #8a94a6;
-        font-size: 0.85rem;
-    }
-    
-    .copyright a {
-        color: #ff8a9c;
+    .xh-box {
+        display: inline-block;
+        background: #ff2442;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
         text-decoration: none;
-        transition: color 0.3s;
+        margin: 10px 0;
+        font-weight: bold;
     }
     
-    .copyright a:hover {
-        color: #ff2442;
-        text-decoration: underline;
+    .xh-box:hover {
+        background: #e0203c;
+        transform: scale(1.05);
+        transition: all 0.3s;
     }
     
-    /* 响应式调整 */
-    @media (max-width: 600px) {
-        .brand-info {
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .brand-title {
-            font-size: 1.3rem;
-        }
-        
-        .xh-link {
-            font-size: 0.9rem;
-            padding: 6px 12px;
-        }
-        
-        .sticky-footer {
-            padding: 20px 0 15px;
-        }
+    .footer-text {
+        color: #666;
+        margin: 15px 0;
+        font-size: 0.9rem;
+    }
+    
+    .copyright {
+        color: #888;
+        font-size: 0.8rem;
+        margin-top: 15px;
     }
     </style>
     """
     
-    # 注入CSS样式
-    st.markdown(footer_css, unsafe_allow_html=True)
-    
-    # 页脚HTML内容
-    footer_html = """
-    <div class="sticky-footer">
-        <div class="footer-content">
-            <div class="brand-info">
-                <div class="brand-title">
-                    <span>🏭</span> 洋葱头工厂
-                </div>
-                
-                <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank" class="xh-link">
-                    <span>📕</span> 小红书账号：
-                    <span class="account-id">750922641</span>
-                </a>
-            </div>
-            
-            <p class="footer-description">专注 AI 工具与数据智能 • 关注获取更多数据清洗、AI 自动化办公技巧</p>
-            
-            <div class="footer-bottom">
-                <p class="copyright">© 2023 SmartClean • 设计 by <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank">洋葱头工厂</a></p>
-                <p style="font-size: 0.8rem; margin-top: 5px; opacity: 0.8;">本地化处理 · 隐私安全 · 零基础友好</p>
-            </div>
+    html = f"""
+    <div class="simple-footer">
+        <div class="footer-title">🏭 洋葱头工厂</div>
+        
+        <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="xh-box">
+            📕 小红书：750922641
+        </a>
+        
+        <p class="footer-text">专注 AI 工具与数据智能 · 关注获取更多实用技巧</p>
+        
+        <div class="copyright">
+            © 2023 SmartClean · 设计 by 
+            <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank" style="color: #ff2442; text-decoration: none;">
+                洋葱头工厂
+            </a>
+            <br>
+            <span style="font-size: 0.75rem;">本地化处理 · 隐私安全 · 零基础友好</span>
         </div>
     </div>
     """
     
-    # 渲染页脚
     st.markdown("---")
-    st.markdown(footer_html, unsafe_allow_html=True)
-
+    st.markdown(css, unsafe_allow_html=True)
+    st.markdown(html, unsafe_allow_html=True)
 
 # ============ 主程序 ============
 def main():
@@ -1154,5 +1078,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
