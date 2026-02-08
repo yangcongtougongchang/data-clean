@@ -1041,12 +1041,18 @@ def render_footer():
     <div class="brand-footer">
         <div class="brand-title">🏭 洋葱头工厂</div>
         <div style="font-size: 1rem; margin-bottom: 10px;">专注 AI 工具与数据智能</div>
-        <div class="brand-id">📕 小红书号：750922641</div>
+        <div class="brand-id">
+            📕 <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" 
+                   target="_blank" 
+                   style="color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor;">
+                   小红书号：750922641
+               </a>
+        </div>
         <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
             关注我们，获取更多数据清洗、AI 自动化办公技巧
         </div>
     </div>
-    
+
     <div style="text-align: center; color: #888; padding: 20px; margin-top: 20px;">
         <p>🧹 SmartClean - 让数据清洗变得简单</p>
         <p style="font-size: 0.8rem;">本地化处理 · 隐私安全 · 零基础友好</p>
@@ -1070,3 +1076,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
