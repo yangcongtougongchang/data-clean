@@ -637,9 +637,6 @@ def render_tutorial():
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("👍 我已了解，隐藏指南", use_container_width=True):
-            st.session_state.show_tutorial = False
-            st.rerun()
 
 def render_upload_section():
     """渲染数据上传区域"""
@@ -1116,6 +1113,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
