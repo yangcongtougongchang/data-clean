@@ -14,6 +14,7 @@ import io
 import base64
 from datetime import datetime
 import hashlib
+from streamlit.components.v1 import html as components_html
 
 # ============ 页面配置 ============
 st.set_page_config(
@@ -1035,141 +1036,183 @@ def render_sidebar():
         st.caption(f"👤 会话ID: {USER_ID}")
 
 def render_footer():
-    """渲染页脚和引流标识 - 高点击率版本"""
+    """高点击率页脚 - 使用 components_v1 完整渲染"""
+
     st.markdown("---")
 
-    css = """
-<style>
-@keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 36, 66, 0.4); transform: scale(1); }
-    50% { box-shadow: 0 0 30px rgba(255, 36, 66, 0.7); transform: scale(1.02); }
-}
+    footer_html = """
+    <style>
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(255, 36, 66, 0.4); transform: scale(1); }
+        50% { box-shadow: 0 0 30px rgba(255, 36, 66, 0.7); transform: scale(1.02); }
+    }
 
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-}
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+    }
 
-.footer-container {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 30px;
-    margin: 20px 0;
-    color: white;
-    text-align: center;
-}
+    @keyframes shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
 
-.brand-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-}
+    .footer-wrapper {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        max-width: 100%;
+        overflow: hidden;
+    }
 
-.xhs-cta-box {
-    background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 400px;
-    animation: pulse-glow 2s infinite;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-}
+    .footer-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 30px 20px;
+        margin: 20px 0;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
 
-.xhs-cta-box:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 10px 40px rgba(255, 36, 66, 0.5);
-}
+    .footer-container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%,
+            rgba(255,255,255,0.1) 50%,
+            transparent 70%
+        );
+        animation: shimmer 3s infinite;
+        pointer-events: none;
+    }
 
-.xhs-link {
-    color: white;
-    text-decoration: none;
-    display: block;
-}
+    .brand-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 1;
+    }
 
-.xhs-icon {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
-    animation: float 2s ease-in-out infinite;
-}
+    .brand-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
 
-.xhs-text {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+    .xhs-cta-box {
+        background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 350px;
+        animation: pulse-glow 2s infinite;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+        text-decoration: none;
+        display: block;
+        color: white !important;
+    }
 
-.xhs-id {
-    font-size: 1rem;
-    opacity: 0.9;
-    background: rgba(255,255,255,0.2);
-    padding: 5px 15px;
-    border-radius: 20px;
-    display: inline-block;
-}
+    .xhs-cta-box:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 40px rgba(255, 36, 66, 0.5);
+    }
 
-.arrow-hint {
-    font-size: 1.5rem;
-    margin-top: 10px;
-    animation: float 1.5s ease-in-out infinite;
-}
+    .xhs-icon {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+        animation: float 2s ease-in-out infinite;
+    }
 
-.benefits {
-    margin-top: 20px;
-    font-size: 0.95rem;
-    opacity: 0.95;
-}
+    .xhs-text {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
 
-.bottom-info {
-    text-align: center;
-    color: #666;
-    padding: 20px;
-    margin-top: 10px;
-    font-size: 0.9rem;
-}
+    .xhs-id {
+        font-size: 1rem;
+        opacity: 0.9;
+        background: rgba(255,255,255,0.2);
+        padding: 5px 15px;
+        border-radius: 20px;
+        display: inline-block;
+    }
 
-.highlight {
-    color: #ff2442;
-    font-weight: bold;
-}
-</style>
-"""
+    .arrow-hint {
+        font-size: 1.5rem;
+        margin-top: 10px;
+        animation: float 1.5s ease-in-out infinite;
+    }
 
-    html = """
-<div class="footer-container">
-    <div class="brand-title">🏭 洋葱头工厂</div>
-    <div style="font-size: 1.1rem; opacity: 0.9;">专注 AI 工具与数据智能</div>
+    .benefits {
+        margin-top: 20px;
+        font-size: 0.95rem;
+        opacity: 0.95;
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+    }
 
-    <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" 
-       target="_blank" 
-       class="xhs-link">
-        <div class="xhs-cta-box">
-            <div class="xhs-icon">📕</div>
-            <div class="xhs-text">点击关注小红书</div>
-            <div class="xhs-id">ID: 750922641</div>
-            <div class="arrow-hint">👇 点我点我 👇</div>
+    .bottom-info {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .highlight {
+        color: #ff2442;
+        font-weight: bold;
+    }
+    </style>
+
+    <div class="footer-wrapper">
+        <div class="footer-container">
+            <div class="brand-title">🏭 洋葱头工厂</div>
+            <div class="brand-subtitle">专注 AI 工具与数据智能</div>
+
+            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" 
+               target="_blank" 
+               class="xhs-cta-box">
+                <div class="xhs-icon">📕</div>
+                <div class="xhs-text">点击关注小红书</div>
+                <div class="xhs-id">ID: 750922641</div>
+                <div class="arrow-hint">👇 点我点我 👇</div>
+            </a>
+
+            <div class="benefits">
+                ✨ 独家数据清洗秘籍 &nbsp;|&nbsp; 🤖 AI自动化办公技巧 &nbsp;|&nbsp; 🎁 实用工具推荐
+            </div>
         </div>
-    </a>
 
-    <div class="benefits">
-        ✨ 独家数据清洗秘籍 &nbsp;|&nbsp; 🤖 AI自动化办公技巧 &nbsp;|&nbsp; 🎁 实用工具推荐
+        <div class="bottom-info">
+            <p style="font-size: 1.1rem; margin-bottom: 8px;">
+                🧹 <span class="highlight">SmartClean</span> - 让数据清洗变得简单
+            </p>
+            <p style="font-size: 0.85rem; color: #999;">
+                本地化处理 · 隐私安全 · 零基础友好
+            </p>
+        </div>
     </div>
-</div>
+    """
 
-<div class="bottom-info">
-    <p style="font-size: 1.1rem; margin-bottom: 8px;">
-        🧹 <span class="highlight">SmartClean</span> - 让数据清洗变得简单
-    </p>
-    <p style="font-size: 0.85rem; color: #999;">
-        本地化处理 · 隐私安全 · 零基础友好
-    </p>
-</div>
-"""
+    # 使用 components_html 完整渲染，高度自适应
+    components_html(footer_html, height=450, scrolling=False)
 
-    st.markdown(css, unsafe_allow_html=True)
-    st.markdown(html, unsafe_allow_html=True)
 
 # ============ 主程序 ============
 def main():
@@ -1188,6 +1231,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
