@@ -1034,12 +1034,11 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
-
 def render_footer():
     """渲染页脚和引流标识 - 高点击率版本"""
     st.markdown("---")
 
-    # 使用自定义CSS动画和样式
+    # 注入CSS样式
     st.markdown("""
     <style>
     @keyframes pulse-glow {
@@ -1162,7 +1161,10 @@ def render_footer():
         font-weight: bold;
     }
     </style>
+    """, unsafe_allow_html=True)
 
+    # 注入HTML内容
+    st.markdown("""
     <div class="footer-container">
         <div class="brand-title">🏭 洋葱头工厂</div>
         <div style="font-size: 1.1rem; opacity: 0.9;">专注 AI 工具与数据智能</div>
@@ -1193,7 +1195,6 @@ def render_footer():
     </div>
     """, unsafe_allow_html=True)
 
-
 # ============ 主程序 ============
 def main():
     render_header()
@@ -1211,5 +1212,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
