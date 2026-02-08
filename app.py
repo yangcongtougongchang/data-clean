@@ -983,9 +983,7 @@ def render_sidebar():
         
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
-
-import streamlit as st
-
+        
 def render_footer():
     """简洁版页脚 - 修复版"""
     
@@ -1243,6 +1241,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
