@@ -1034,30 +1034,165 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
+
 def render_footer():
-    """渲染页脚和引流标识"""
+    """渲染页脚和引流标识 - 高点击率版本"""
     st.markdown("---")
+
+    # 使用自定义CSS动画和样式
     st.markdown("""
-    <div class="brand-footer">
+    <style>
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(255, 36, 66, 0.4); transform: scale(1); }
+        50% { box-shadow: 0 0 30px rgba(255, 36, 66, 0.7); transform: scale(1.02); }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+    }
+
+    @keyframes shimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+
+    .footer-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 30px;
+        margin: 20px 0;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer-container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%,
+            rgba(255,255,255,0.1) 50%,
+            transparent 70%
+        );
+        animation: shimmer 3s infinite;
+    }
+
+    .brand-title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .xhs-cta-box {
+        background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 400px;
+        animation: pulse-glow 2s infinite;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .xhs-cta-box:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 40px rgba(255, 36, 66, 0.5);
+    }
+
+    .xhs-link {
+        color: white;
+        text-decoration: none;
+        display: block;
+    }
+
+    .xhs-icon {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+        animation: float 2s ease-in-out infinite;
+    }
+
+    .xhs-text {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .xhs-id {
+        font-size: 1rem;
+        opacity: 0.9;
+        background: rgba(255,255,255,0.2);
+        padding: 5px 15px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .arrow-hint {
+        font-size: 1.5rem;
+        margin-top: 10px;
+        animation: float 1.5s ease-in-out infinite;
+    }
+
+    .benefits {
+        margin-top: 20px;
+        font-size: 0.95rem;
+        opacity: 0.95;
+        line-height: 1.6;
+    }
+
+    .bottom-info {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    .highlight {
+        color: #ff2442;
+        font-weight: bold;
+    }
+    </style>
+
+    <div class="footer-container">
         <div class="brand-title">🏭 洋葱头工厂</div>
-        <div style="font-size: 1rem; margin-bottom: 10px;">专注 AI 工具与数据智能</div>
-        <div class="brand-id">
-            📕 <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" 
-                   target="_blank" 
-                   style="color: inherit; text-decoration: none; border-bottom: 1px dashed currentColor;">
-                   小红书号：750922641
-               </a>
-        </div>
-        <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
-            关注我们，获取更多数据清洗、AI 自动化办公技巧
+        <div style="font-size: 1.1rem; opacity: 0.9;">专注 AI 工具与数据智能</div>
+
+        <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" 
+           target="_blank" 
+           class="xhs-link">
+            <div class="xhs-cta-box">
+                <div class="xhs-icon">📕</div>
+                <div class="xhs-text">点击关注小红书</div>
+                <div class="xhs-id">ID: 750922641</div>
+                <div class="arrow-hint">👇 点我点我 👇</div>
+            </div>
+        </a>
+
+        <div class="benefits">
+            ✨ 独家数据清洗秘籍 &nbsp;|&nbsp; 🤖 AI自动化办公技巧 &nbsp;|&nbsp; 🎁 实用工具推荐
         </div>
     </div>
 
-    <div style="text-align: center; color: #888; padding: 20px; margin-top: 20px;">
-        <p>🧹 SmartClean - 让数据清洗变得简单</p>
-        <p style="font-size: 0.8rem;">本地化处理 · 隐私安全 · 零基础友好</p>
+    <div class="bottom-info">
+        <p style="font-size: 1.1rem; margin-bottom: 8px;">
+            🧹 <span class="highlight">SmartClean</span> - 让数据清洗变得简单
+        </p>
+        <p style="font-size: 0.85rem; color: #999;">
+            本地化处理 · 隐私安全 · 零基础友好
+        </p>
     </div>
     """, unsafe_allow_html=True)
+
 
 # ============ 主程序 ============
 def main():
@@ -1076,4 +1211,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
