@@ -1212,7 +1212,7 @@ def render_footer():
     """
 
     # 使用 components_html 完整渲染，高度自适应
-    components_html(footer_html, height=450, scrolling=False)
+    components_html(footer_html, height=250, scrolling=False)
 
 
 # ============ 主程序 ============
@@ -1232,6 +1232,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
