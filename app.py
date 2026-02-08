@@ -14,7 +14,7 @@ import io
 import base64
 from datetime import datetime
 import hashlib
-from streamlit.components.v1 import html as components_html
+
 # ============ 页面配置 ============
 st.set_page_config(
     page_title="SmartClean - 智能数据清洗",
@@ -95,7 +95,7 @@ custom_css = """
         border-left: 5px solid #f59e0b;
     }
     
-    /* 步骤指示器 */
+    /* 步骤指示器 - 使用 Streamlit 原生组件替代 HTML */
     .step-container {
         display: flex;
         justify-content: space-between;
@@ -418,17 +418,19 @@ def create_overview_charts(df, analysis):
     """创建数据概览可视化"""
     charts = []
     
-    # 1. 数据类型分布饼图
+    # 1. 数据类型分布饼图 - 修复：使用正确的颜色序列
     type_counts = {
         '数值型': len(analysis['numeric_cols']),
         '分类型': len(analysis['categorical_cols']),
         '日期型': len(analysis['datetime_cols'])
     }
+    
+    # 使用 Plotly Express 内置的有效颜色序列
     fig1 = px.pie(
         values=list(type_counts.values()), 
         names=list(type_counts.keys()),
         title="📊 数据类型分布",
-        color_discrete_sequence=px.colors.sequential.Purple,
+        color_discrete_sequence=px.colors.qualitative.Set3,  # 修复：使用 Set3 替代 Purple
         hole=0.4
     )
     fig1.update_traces(textposition='inside', textinfo='percent+label')
@@ -549,27 +551,75 @@ def render_header():
     st.markdown('<h1 class="main-title">🧹 SmartClean 智能数据清洗</h1>', unsafe_allow_html=True)
     st.markdown('<p class="sub-title">零基础友好的数据清洗与可视化分析平台</p>', unsafe_allow_html=True)
     
-    # 步骤指示器
+    # 步骤指示器 - 修复：使用 Streamlit 原生 columns 替代 HTML
     steps = [
-        ("1", "上传数据", "📤"),
-        ("2", "质量分析", "🔍"),
-        ("3", "智能清洗", "✨"),
-        ("4", "可视化", "📈"),
-        ("5", "导出结果", "💾")
+        ("📤", "上传数据"),
+        ("🔍", "质量分析"),
+        ("✨", "智能清洗"),
+        ("📈", "可视化"),
+        ("💾", "导出结果")
     ]
     
     current = st.session_state.current_step
-    html_steps = '<div class="step-container">'
-    for i, (num, label, icon) in enumerate(steps, 1):
-        active_class = "active" if i == current else ""
-        html_steps += f'''
-        <div class="step-item {active_class}">
-            <div class="step-number">{icon}</div>
-            <div style="font-size:0.9rem;font-weight:600;">{label}</div>
-        </div>
-        '''
-    html_steps += '</div>'
-    st.markdown(html_steps, unsafe_allow_html=True)
+    
+    # 使用 Streamlit 原生组件创建步骤指示器
+    cols = st.columns(len(steps))
+    for i, (icon, label) in enumerate(steps, 1):
+        with cols[i-1]:
+            # 根据当前步骤设置样式
+            if i == current:
+                st.markdown(f"""
+                <div style="
+                    text-align: center;
+                    padding: 15px;
+                    background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+                    border-radius: 12px;
+                    border: 2px solid #667eea;
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+                    transform: translateY(-2px);
+                ">
+                    <div style="
+                        width: 35px;
+                        height: 35px;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        border-radius: 50%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        margin-bottom: 8px;
+                        color: white;
+                        font-size: 1.2rem;
+                    ">{icon}</div>
+                    <div style="font-size:0.9rem;font-weight:600;color:#667eea;">{label}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div style="
+                    text-align: center;
+                    padding: 15px;
+                    background: white;
+                    border-radius: 12px;
+                    border: 2px solid #e0e0e0;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                ">
+                    <div style="
+                        width: 35px;
+                        height: 35px;
+                        background: #e0e0e0;
+                        border-radius: 50%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        margin-bottom: 8px;
+                        color: white;
+                        font-size: 1.2rem;
+                    ">{icon}</div>
+                    <div style="font-size:0.9rem;font-weight:600;color:#888;">{label}</div>
+                </div>
+                """, unsafe_allow_html=True)
 
 def render_tutorial():
     """渲染使用教程（针对零基础用户）"""
@@ -729,7 +779,7 @@ def render_analysis_section():
         # 列选择查看
         selected_cols = st.multiselect(
             "选择特定列查看",
-            options=df.columns.tolist(),
+            options=list(df.columns),
             default=list(df.columns[:5]),
             key=f"cols_select_{USER_ID}"
         )
@@ -984,88 +1034,25 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
-
 def render_footer():
-    """简洁版页脚 - 修复版"""
-    
-    footer_content = """
-    <style>
-    .simple-footer {
-        text-align: center;
-        padding: 20px;
-        margin-top: 40px;
-        background: #f5f7fa;
-        border-radius: 10px;
-        border-top: 2px solid #ff2442;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-    
-    .footer-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #1a1a2e;
-    }
-    
-    .xh-box {
-        display: inline-block;
-        background: #ff2442;
-        color: white !important;
-        padding: 8px 16px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin: 10px 0;
-        font-weight: bold;
-        transition: all 0.3s;
-    }
-    
-    .xh-box:hover {
-        background: #e0203c;
-        transform: scale(1.05);
-    }
-    
-    .footer-text {
-        color: #666;
-        margin: 15px 0;
-        font-size: 0.9rem;
-    }
-    
-    .copyright {
-        color: #888;
-        font-size: 0.8rem;
-        margin-top: 15px;
-        line-height: 1.6;
-    }
-    
-    .copyright a {
-        color: #ff2442;
-        text-decoration: none;
-    }
-    </style>
-    
-    <div class="simple-footer">
-        <div class="footer-title">🏭 洋葱头工厂</div>
-        
-        <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="xh-box">
-            📕 小红书：750922641
-        </a>
-        
-        <p class="footer-text">专注 AI 工具与数据智能 · 关注获取更多实用技巧</p>
-        
-        <div class="copyright">
-            © 2023 SmartClean · 设计 by 
-            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank">
-                洋葱头工厂
-            </a>
-            <br>
-            <span style="font-size: 0.75rem;">本地化处理 · 隐私安全 · 零基础友好</span>
+    """渲染页脚和引流标识"""
+    st.markdown("---")
+    st.markdown("""
+    <div class="brand-footer">
+        <div class="brand-title">🏭 洋葱头工厂</div>
+        <div style="font-size: 1rem; margin-bottom: 10px;">专注 AI 工具与数据智能</div>
+        <div class="brand-id">📕 小红书号：750922641</div>
+        <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
+            关注我们，获取更多数据清洗、AI 自动化办公技巧
         </div>
     </div>
-    """
     
-    st.markdown("---")
-    # 使用 components_html 完整渲染，高度自适应
-    components_html(footer_content, height=250, scrolling=False)
+    <div style="text-align: center; color: #888; padding: 20px; margin-top: 20px;">
+        <p>🧹 SmartClean - 让数据清洗变得简单</p>
+        <p style="font-size: 0.8rem;">本地化处理 · 隐私安全 · 零基础友好</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # ============ 主程序 ============
 def main():
     render_header()
@@ -1083,14 +1070,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
