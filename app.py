@@ -984,7 +984,7 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
-def render_footer_pure():
+def render_footer():
     """纯 Streamlit 组件版页脚（最稳定）"""
     
     st.markdown("---")
@@ -1115,6 +1115,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
