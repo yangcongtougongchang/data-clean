@@ -13,7 +13,6 @@ from plotly.subplots import make_subplots
 import io
 import base64
 from datetime import datetime
-import json
 import hashlib
 
 # ============ 页面配置 ============
@@ -203,6 +202,33 @@ custom_css = """
         font-size: 0.9rem;
     }
     
+    /* 引流标识样式 */
+    .brand-footer {
+        background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .brand-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .brand-id {
+        font-size: 1.2rem;
+        background: rgba(255,255,255,0.2);
+        padding: 5px 15px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-top: 5px;
+    }
+    
     /* 代码块样式 */
     .code-block {
         background: #2d2d2d;
@@ -273,7 +299,7 @@ def generate_sample_data():
         '消费金额': np.random.exponential(1000, n).round(2),
         '会员等级': np.random.choice(['普通', '银卡', '金卡', '钻石', None], n, p=[0.4, 0.3, 0.2, 0.05, 0.05]),
         '满意度评分': np.random.choice([1, 2, 3, 4, 5, None], n, p=[0.05, 0.1, 0.2, 0.3, 0.25, 0.1]),
-        '最后登录': pd.date_range('2023-01-01', periods=n, freq='H').tolist()
+        '最后登录': pd.date_range('2023-01-01', periods=n, freq='h').tolist()
     }
     
     df = pd.DataFrame(data)
@@ -402,7 +428,7 @@ def create_overview_charts(df, analysis):
         values=list(type_counts.values()), 
         names=list(type_counts.keys()),
         title="📊 数据类型分布",
-        color_discrete_sequence=px.colors.sequential.Violet_r,
+        color_discrete_sequence=px.colors.sequential.Purple,
         hole=0.4
     )
     fig1.update_traces(textposition='inside', textinfo='percent+label')
@@ -487,8 +513,6 @@ def create_cleaning_impact_chart(before_df, after_df):
     fig = go.Figure()
     
     categories = list(metrics.keys())
-    x = np.arange(len(categories))
-    width = 0.35
     
     fig.add_trace(go.Bar(
         name='清洗前',
@@ -631,7 +655,8 @@ def render_upload_section():
 
 def render_analysis_section():
     """渲染数据分析区域"""
-    if st.session_state.raw_data is None:
+    # 修复：使用 a.empty 检查 DataFrame 是否为空，而不是布尔判断
+    if st.session_state.raw_data is None or st.session_state.raw_data.empty:
         return
     
     st.markdown("---")
@@ -664,8 +689,8 @@ def render_analysis_section():
     
     with tab1:
         charts = create_overview_charts(df, analysis)
-        for chart in charts:
-            st.plotly_chart(chart, use_container_width=True, key=f"chart_{hash(str(chart))}_{USER_ID}")
+        for i, chart in enumerate(charts):
+            st.plotly_chart(chart, use_container_width=True, key=f"chart_{i}_{USER_ID}")
         
         # 相关性分析
         corr_chart = create_correlation_heatmap(df)
@@ -705,7 +730,7 @@ def render_analysis_section():
         selected_cols = st.multiselect(
             "选择特定列查看",
             options=df.columns.tolist(),
-            default=df.columns[:5].tolist(),
+            default=list(df.columns[:5]),
             key=f"cols_select_{USER_ID}"
         )
         if selected_cols:
@@ -713,7 +738,8 @@ def render_analysis_section():
 
 def render_cleaning_section():
     """渲染数据清洗操作区"""
-    if st.session_state.raw_data is None:
+    # 修复：使用 a.empty 检查 DataFrame 是否为空
+    if st.session_state.raw_data is None or st.session_state.raw_data.empty:
         return
     
     st.markdown("---")
@@ -788,7 +814,7 @@ def render_cleaning_section():
             st.markdown("#### 🔄 数据类型转换")
             type_cols = st.multiselect(
                 "选择要转换类型的列",
-                df.columns.tolist(),
+                list(df.columns),
                 key=f"type_cols_{USER_ID}"
             )
             for col in type_cols:
@@ -826,9 +852,10 @@ def render_cleaning_section():
 
 def render_results_section():
     """渲染清洗结果和导出"""
-    if st.session_state.cleaned_data is None:
+    # 修复：使用 a.empty 检查 DataFrame 是否为空
+    if st.session_state.cleaned_data is None or st.session_state.cleaned_data.empty:
         # 如果没有清洗数据但原始数据存在，显示原始数据对比
-        if st.session_state.raw_data is not None:
+        if st.session_state.raw_data is not None and not st.session_state.raw_data.empty:
             st.markdown("---")
             st.markdown("### 📈 第四步：可视化分析")
             st.info("执行清洗操作后，此处将显示清洗前后的对比分析")
@@ -915,12 +942,15 @@ def render_sidebar():
         
         # 当前状态
         st.markdown("**当前会话状态**")
-        status_color = "🟢" if st.session_state.raw_data is not None else "⚪"
-        st.markdown(f"{status_color} 数据加载: {'已完成' if st.session_state.raw_data else '未开始'}")
+        # 修复：使用 is None 和 empty 检查
+        has_data = st.session_state.raw_data is not None and not st.session_state.raw_data.empty
+        status_color = "🟢" if has_data else "⚪"
+        st.markdown(f"{status_color} 数据加载: {'已完成' if has_data else '未开始'}")
         
-        if st.session_state.raw_data:
-            status_color = "🟢" if st.session_state.cleaned_data else "🟡"
-            st.markdown(f"{status_color} 数据清洗: {'已完成' if st.session_state.cleaned_data else '进行中'}")
+        if has_data:
+            has_cleaned = st.session_state.cleaned_data is not None and not st.session_state.cleaned_data.empty
+            status_color = "🟢" if has_cleaned else "🟡"
+            st.markdown(f"{status_color} 数据清洗: {'已完成' if has_cleaned else '进行中'}")
         
         st.markdown("---")
         
@@ -931,7 +961,7 @@ def render_sidebar():
                 st.session_state[key] = None if key != 'current_step' else 1
             st.rerun()
         
-        if st.session_state.raw_data and st.button("📊 仅查看分析", use_container_width=True):
+        if has_data and st.button("📊 仅查看分析", use_container_width=True):
             st.session_state.current_step = 2
             st.rerun()
         
@@ -954,6 +984,25 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
+def render_footer():
+    """渲染页脚和引流标识"""
+    st.markdown("---")
+    st.markdown("""
+    <div class="brand-footer">
+        <div class="brand-title">🏭 洋葱头工厂</div>
+        <div style="font-size: 1rem; margin-bottom: 10px;">专注 AI 工具与数据智能</div>
+        <div class="brand-id">📕 小红书号：750922641</div>
+        <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
+            关注我们，获取更多数据清洗、AI 自动化办公技巧
+        </div>
+    </div>
+    
+    <div style="text-align: center; color: #888; padding: 20px; margin-top: 20px;">
+        <p>🧹 SmartClean - 让数据清洗变得简单</p>
+        <p style="font-size: 0.8rem;">本地化处理 · 隐私安全 · 零基础友好</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # ============ 主程序 ============
 def main():
     render_header()
@@ -967,13 +1016,7 @@ def main():
     render_results_section()
     
     # 页脚
-    st.markdown("---")
-    st.markdown("""
-    <div style="text-align: center; color: #888; padding: 20px;">
-        <p>🧹 SmartClean - 让数据清洗变得简单</p>
-        <p style="font-size: 0.8rem;">本地化处理 · 隐私安全 · 零基础友好</p>
-    </div>
-    """, unsafe_allow_html=True)
+    render_footer()
 
 if __name__ == "__main__":
     main()
