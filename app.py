@@ -985,23 +985,93 @@ def render_sidebar():
         st.caption(f"👤 会话ID: {USER_ID}")
 
 def render_footer():
-    """渲染页脚和引流标识"""
+    """渲染页脚和引流标识 - 极简版"""
+    
+    # 极简CSS样式
+    simple_css = """
+    <style>
+    .simple-footer {
+        margin-top: 40px;
+        padding: 20px 0;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        text-align: center;
+    }
+    
+    .footer-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .footer-xhs {
+        background: #ff2442;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        margin: 0 5px;
+        transition: all 0.3s;
+    }
+    
+    .footer-xhs:hover {
+        background: #e0203c;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(255, 36, 66, 0.3);
+    }
+    
+    .footer-copyright {
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin-top: 10px;
+    }
+    
+    .footer-copyright a {
+        color: #ff2442;
+        text-decoration: none;
+    }
+    
+    .footer-copyright a:hover {
+        text-decoration: underline;
+    }
+    </style>
+    """
+    
+    # 注入CSS并渲染
+    st.markdown(simple_css, unsafe_allow_html=True)
+    
     st.markdown("---")
-    st.markdown("""
-    <div class="brand-footer">
-        <div class="brand-title">🏭 洋葱头工厂</div>
-        <div style="font-size: 1rem; margin-bottom: 10px;">专注 AI 工具与数据智能</div>
-        <div class="brand-id">📕 小红书号：750922641</div>
-        <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.9;">
-            关注我们，获取更多数据清洗、AI 自动化办公技巧
+    
+    footer_html = """
+    <div class="simple-footer">
+        <div class="footer-brand">
+            <span>🏭</span>
+            <strong>洋葱头工厂</strong>
+        </div>
+        
+        <div style="margin: 10px 0;">
+            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="footer-xhs">
+                📕 小红书：750922641
+            </a>
+        </div>
+        
+        <div style="color: #666; font-size: 0.9rem; margin: 8px 0;">
+            专注 AI 工具与数据智能
+        </div>
+        
+        <div class="footer-copyright">
+            © 2023 SmartClean • 设计 by 
+            <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank">洋葱头工厂</a>
         </div>
     </div>
+    """
     
-    <div style="text-align: center; color: #888; padding: 20px; margin-top: 20px;">
-        <p>🧹 SmartClean - 让数据清洗变得简单</p>
-        <p style="font-size: 0.8rem;">本地化处理 · 隐私安全 · 零基础友好</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(footer_html, unsafe_allow_html=True)
 
 # ============ 主程序 ============
 def main():
@@ -1020,3 +1090,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
