@@ -1035,6 +1035,7 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
+
 def render_footer():
     """高点击率页脚 - 使用 components_v1 完整渲染"""
 
@@ -1231,6 +1232,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
