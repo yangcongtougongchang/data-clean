@@ -1035,94 +1035,198 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
-def render_footer():
-    """简洁版页脚 - 渐变背景版"""
+from streamlit.components.v1 import html as components_html
 
+def render_footer():
+    """渐变背景 + 呼吸灯效果页脚"""
+    
     footer_content = """
     <style>
+    @keyframes breathe {
+        0% { box-shadow: 0 0 8px rgba(255, 36, 66, 0.6); }
+        50% { box-shadow: 0 0 20px rgba(255, 36, 66, 0.9), 0 0 30px rgba(255, 36, 66, 0.5); }
+        100% { box-shadow: 0 0 8px rgba(255, 36, 66, 0.6); }
+    }
+    
+    @keyframes subtleFloat {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+        100% { transform: translateY(0); }
+    }
+    
     .simple-footer {
         text-align: center;
-        padding: 20px;
+        padding: 25px 20px;
         margin-top: 40px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 10px;
+        background: linear-gradient(135deg, 
+            #1a1a2e 0%, 
+            #16213e 30%, 
+            #0f3460 70%, 
+            #1a1a2e 100%);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 36, 66, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        color: white;
+        position: relative;
+        overflow: hidden;
     }
-
+    
+    /* 添加光斑效果 */
+    .simple-footer::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 36, 66, 0.08) 0%,
+            transparent 50%
+        );
+        pointer-events: none;
+    }
+    
     .footer-title {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         color: white;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        animation: subtleFloat 3s ease-in-out infinite;
     }
-
+    
     .xh-box {
         display: inline-block;
-        background: linear-gradient(135deg, #ff2442 0%, #ff6b6b 100%);
+        background: linear-gradient(135deg, #ff2442 0%, #e0203c 100%);
         color: white !important;
-        padding: 8px 16px;
-        border-radius: 6px;
+        padding: 12px 24px;
+        border-radius: 10px;
         text-decoration: none;
-        margin: 10px 0;
-        font-weight: bold;
-        transition: all 0.3s;
-        box-shadow: 0 2px 8px rgba(255, 36, 66, 0.3);
-    }
-
-    .xh-box:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(255, 36, 66, 0.4);
-    }
-
-    .footer-text {
-        color: rgba(255, 255, 255, 0.9);
         margin: 15px 0;
-        font-size: 0.9rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        animation: breathe 2s ease-in-out infinite;
+        transform-origin: center;
     }
-
+    
+    .xh-box:hover {
+        background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+        transform: scale(1.08);
+        animation-play-state: paused;
+        box-shadow: 0 0 25px rgba(255, 36, 66, 1);
+    }
+    
+    /* 小红书的图标效果 */
+    .xh-box::before {
+        content: '📕';
+        display: inline-block;
+        margin-right: 8px;
+        font-size: 1.2rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    
+    .footer-text {
+        color: rgba(255, 255, 255, 0.85);
+        margin: 20px auto;
+        font-size: 1rem;
+        line-height: 1.6;
+        max-width: 600px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.2);
+        padding: 12px 20px;
+        border-radius: 8px;
+        border-left: 3px solid #ff2442;
+    }
+    
     .copyright {
         color: rgba(255, 255, 255, 0.7);
-        font-size: 0.8rem;
-        margin-top: 15px;
-        line-height: 1.6;
+        font-size: 0.9rem;
+        margin-top: 20px;
+        line-height: 1.8;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-
+    
     .copyright a {
-        color: #ffd700;
+        color: #ff8a9c;
         text-decoration: none;
-        font-weight: bold;
+        font-weight: 500;
+        transition: all 0.3s;
+        padding: 2px 6px;
+        border-radius: 4px;
     }
-
+    
     .copyright a:hover {
-        text-decoration: underline;
+        color: white;
+        background: rgba(255, 36, 66, 0.3);
+        text-shadow: 0 0 10px rgba(255, 138, 156, 0.8);
+    }
+    
+    /* 工厂图标动画 */
+    .factory-icon {
+        display: inline-block;
+        animation: subtleFloat 4s ease-in-out infinite;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+    }
+    
+    /* 底部小字样式 */
+    .subtext {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        margin-top: 8px;
+        text-transform: uppercase;
+    }
+    
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+        .simple-footer {
+            padding: 20px 15px;
+            border-radius: 12px;
+        }
+        
+        .footer-title {
+            font-size: 1.5rem;
+        }
+        
+        .xh-box {
+            padding: 10px 18px;
+            font-size: 1rem;
+        }
     }
     </style>
-
+    
     <div class="simple-footer">
-        <div class="footer-title">🏭 洋葱头工厂</div>
-
-        <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="xh-box">
-            📕 小红书：750922641
+        <div class="footer-title">
+            <span class="factory-icon">🏭</span> 洋葱头工厂
+        </div>
+        
+        <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank" class="xh-box">
+            小红书：750922641
         </a>
-
-        <p class="footer-text">专注 AI 工具与数据智能 · 关注获取更多实用技巧</p>
-
+        
+        <p class="footer-text">
+            专注 AI 工具与数据智能 · 关注获取更多实用技巧与教程
+        </p>
+        
         <div class="copyright">
-            © 2023 SmartClean · 设计 by 
-            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank">
+            © 2023 SmartClean · 设计制作: 
+            <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank">
                 洋葱头工厂
             </a>
             <br>
-            <span style="font-size: 0.75rem; opacity: 0.8;">本地化处理 · 隐私安全 · 零基础友好</span>
+            <span class="subtext">本地化处理 · 隐私安全 · 零基础友好 · 持续更新</span>
         </div>
     </div>
     """
-
+    
     st.markdown("---")
-    components_html(footer_content, height=250, scrolling=False)
-
+    # 使用 components_html 完整渲染，高度自适应
+    components_html(footer_content, height=320, scrolling=False)
 
 # ============ 主程序 ============
 def main():
@@ -1141,6 +1245,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
