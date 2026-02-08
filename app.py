@@ -632,29 +632,6 @@ def render_tutorial():
         <strong>重复数据</strong>（多余的复印件）和<strong>格式错误</strong>（放错地方的物品）。本工具帮您自动发现并修复这些问题。</p>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div class="metric-box">
-                <div style="font-size: 2rem;">1️⃣</div>
-                <h4>上传文件</h4>
-                <p style="font-size: 0.9rem; color: #666;">支持 CSV、Excel 格式<br>或直接试用示例数据</p>
-            </div>
-            <div class="metric-box">
-                <div style="font-size: 2rem;">2️⃣</div>
-                <h4>查看分析</h4>
-                <p style="font-size: 0.9rem; color: #666;">自动检测数据质量问题<br>可视化展示统计图表</p>
-            </div>
-            <div class="metric-box">
-                <div style="font-size: 2rem;">3️⃣</div>
-                <h4>选择清洗</h4>
-                <p style="font-size: 0.9rem; color: #666;">勾选要执行的清洗操作<br>实时预览处理效果</p>
-            </div>
-            <div class="metric-box">
-                <div style="font-size: 2rem;">4️⃣</div>
-                <h4>导出数据</h4>
-                <p style="font-size: 0.9rem; color: #666;">下载清洗后的干净数据<br>支持 CSV/Excel 格式</p>
-            </div>
-        </div>
-        
         <div class="help-tip">
         💡 <strong>提示：</strong>如果您没有现成的数据文件，可以点击"使用示例数据"按钮，我们会提供一份包含常见问题的模拟数据供您练习。
         </div>
@@ -1139,6 +1116,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
