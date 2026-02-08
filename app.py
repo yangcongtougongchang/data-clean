@@ -29,20 +29,48 @@ st.set_page_config(
     }
 )
 
-# 隐藏GitHub图标和Streamlit默认菜单
-hide_streamlit_style = """
+# 精准隐藏GitHub图标，保留侧边栏（修复版）
+hide_github_only = """
 <style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-.stDeployButton {display:none;}
-.css-1rs6os {visibility: hidden;}
-.css-17ziqus {visibility: hidden;}
-.viewerBadge_container__1QSob {visibility: hidden;}
-.css-1dp5vir {visibility: hidden;}
+/* ❌ 删除：header {visibility: hidden;} - 这会隐藏侧边栏切换按钮！ */
+
+/* ✅ 精准隐藏GitHub图标 - 通过href属性定位 */
+a[href*="github.com/streamlit"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* 隐藏Deploy按钮 */
+.stDeployButton, [data-testid="stDeployButton"] {
+    display: none !important;
+}
+
+/* 隐藏底部"Made with Streamlit" */
+footer {
+    visibility: hidden;
+}
+
+/* ✅ 确保侧边栏切换按钮可见（关键修复） */
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: flex !important;
+    z-index: 999999 !important;
+}
+
+/* 确保header可见，否则侧边栏按钮会消失 */
+header {
+    visibility: visible !important;
+}
+
+/* 如果需要，隐藏右上角的其他菜单按钮（可选） */
+button[kind="header"], .stAppToolbar {
+    display: none !important;
+}
 </style>
 """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+st.markdown(hide_github_only, unsafe_allow_html=True)
+# st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # ============ 自定义CSS样式 ============
 custom_css = """
@@ -1113,6 +1141,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
