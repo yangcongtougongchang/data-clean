@@ -984,82 +984,247 @@ def render_sidebar():
         st.markdown("---")
         st.caption(f"👤 会话ID: {USER_ID}")
 
+import streamlit as st
+
 def render_footer():
-    """简洁版页脚"""
+    """简洁版页脚 - 修复版"""
     
-    css = """
+    # 使用 st.html (Streamlit 1.28+) 或 st.markdown with unsafe_allow_html
+    footer_html = """
     <style>
     .simple-footer {
         text-align: center;
-        padding: 20px;
-        margin-top: 40px;
-        background: #f5f7fa;
-        border-radius: 10px;
-        border-top: 2px solid #ff2442;
+        padding: 2rem;
+        margin-top: 3rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        border-top: 3px solid #ff2442;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     
     .footer-title {
         font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 10px;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
         color: #1a1a2e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
     
     .xh-box {
-        display: inline-block;
-        background: #ff2442;
-        color: white;
-        padding: 8px 16px;
-        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #ff2442 0%, #e0203c 100%);
+        color: white !important;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
         text-decoration: none;
-        margin: 10px 0;
-        font-weight: bold;
+        margin: 1rem 0;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(255, 36, 66, 0.3);
+        transition: all 0.3s ease;
     }
     
     .xh-box:hover {
-        background: #e0203c;
-        transform: scale(1.05);
-        transition: all 0.3s;
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(255, 36, 66, 0.4);
     }
     
     .footer-text {
-        color: #666;
-        margin: 15px 0;
-        font-size: 0.9rem;
+        color: #4a5568;
+        margin: 1rem 0;
+        font-size: 0.95rem;
+        font-weight: 500;
     }
     
     .copyright {
-        color: #888;
-        font-size: 0.8rem;
-        margin-top: 15px;
+        color: #718096;
+        font-size: 0.85rem;
+        margin-top: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .copyright a {
+        color: #ff2442;
+        text-decoration: none;
+        font-weight: 600;
+        transition: opacity 0.2s;
+    }
+    
+    .copyright a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+    
+    .tagline {
+        display: inline-block;
+        background: rgba(255, 36, 66, 0.1);
+        color: #ff2442;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
     }
     </style>
-    """
     
-    html = f"""
     <div class="simple-footer">
-        <div class="footer-title">🏭 洋葱头工厂</div>
+        <div class="footer-title">
+            <span style="font-size: 1.8rem;">🏭</span>
+            <span>洋葱头工厂</span>
+        </div>
         
         <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="xh-box">
-            📕 小红书：750922641
+            <span>📕</span>
+            <span>小红书：750922641</span>
         </a>
         
         <p class="footer-text">专注 AI 工具与数据智能 · 关注获取更多实用技巧</p>
         
         <div class="copyright">
             © 2023 SmartClean · 设计 by 
-            <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank" style="color: #ff2442; text-decoration: none;">
+            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank">
                 洋葱头工厂
             </a>
             <br>
-            <span style="font-size: 0.75rem;">本地化处理 · 隐私安全 · 零基础友好</span>
+            <span class="tagline">本地化处理 · 隐私安全 · 零基础友好</span>
         </div>
     </div>
     """
     
+    # 添加分隔线
     st.markdown("---")
-    st.markdown(css, unsafe_allow_html=True)
-    st.markdown(html, unsafe_allow_html=True)
+    
+    # 方法1: 使用 st.html (推荐，Streamlit 1.28+)
+    try:
+        st.html(footer_html)
+    except AttributeError:
+        # 方法2: 兼容旧版本，使用 st.markdown
+        st.markdown(footer_html, unsafe_allow_html=True)import streamlit as st
+
+def render_footer():
+    """简洁版页脚 - 修复版"""
+    
+    # 使用 st.html (Streamlit 1.28+) 或 st.markdown with unsafe_allow_html
+    footer_html = """
+    <style>
+    .simple-footer {
+        text-align: center;
+        padding: 2rem;
+        margin-top: 3rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        border-top: 3px solid #ff2442;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .footer-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #1a1a2e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .xh-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, #ff2442 0%, #e0203c 100%);
+        color: white !important;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 1rem 0;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(255, 36, 66, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .xh-box:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(255, 36, 66, 0.4);
+    }
+    
+    .footer-text {
+        color: #4a5568;
+        margin: 1rem 0;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+    
+    .copyright {
+        color: #718096;
+        font-size: 0.85rem;
+        margin-top: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .copyright a {
+        color: #ff2442;
+        text-decoration: none;
+        font-weight: 600;
+        transition: opacity 0.2s;
+    }
+    
+    .copyright a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+    
+    .tagline {
+        display: inline-block;
+        background: rgba(255, 36, 66, 0.1);
+        color: #ff2442;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    </style>
+    
+    <div class="simple-footer">
+        <div class="footer-title">
+            <span style="font-size: 1.8rem;">🏭</span>
+            <span>洋葱头工厂</span>
+        </div>
+        
+        <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="xh-box">
+            <span>📕</span>
+            <span>小红书：750922641</span>
+        </a>
+        
+        <p class="footer-text">专注 AI 工具与数据智能 · 关注获取更多实用技巧</p>
+        
+        <div class="copyright">
+            © 2023 SmartClean · 设计 by 
+            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank">
+                洋葱头工厂
+            </a>
+            <br>
+            <span class="tagline">本地化处理 · 隐私安全 · 零基础友好</span>
+        </div>
+    </div>
+    """
+    
+    # 添加分隔线
+    st.markdown("---")
+    
+    # 方法1: 使用 st.html (推荐，Streamlit 1.28+)
+    try:
+        st.html(footer_html)
+    except AttributeError:
+        # 方法2: 兼容旧版本，使用 st.markdown
+        st.markdown(footer_html, unsafe_allow_html=True)
 
 # ============ 主程序 ============
 def main():
@@ -1078,6 +1243,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
