@@ -985,93 +985,157 @@ def render_sidebar():
         st.caption(f"👤 会话ID: {USER_ID}")
 
 def render_footer():
-    """渲染页脚和引流标识 - 极简版"""
+    """渲染页脚和引流标识 - 简洁小红书引流版"""
     
-    # 极简CSS样式
-    simple_css = """
+    # Streamlit 页脚CSS样式
+    footer_css = """
     <style>
-    .simple-footer {
+    /* 简洁引流页脚样式 */
+    .sticky-footer {
+        position: relative;
         margin-top: 40px;
-        padding: 20px 0;
-        background: #f8f9fa;
-        border-top: 1px solid #e9ecef;
+        padding: 25px 0 20px;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: #f8f9fa;
+        border-top: 3px solid #ff2442;
+        border-radius: 12px 12px 0 0;
+        width: 100%;
+    }
+    
+    .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
         text-align: center;
     }
     
-    .footer-brand {
-        display: inline-flex;
+    .brand-info {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 8px;
+        gap: 20px;
+        margin-bottom: 15px;
     }
     
-    .footer-xhs {
-        background: #ff2442;
+    .brand-title {
+        font-size: 1.5rem;
+        font-weight: 600;
         color: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        text-decoration: none;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 6px;
-        font-weight: 500;
-        margin: 0 5px;
-        transition: all 0.3s;
+        gap: 8px;
     }
     
-    .footer-xhs:hover {
-        background: #e0203c;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(255, 36, 66, 0.3);
-    }
-    
-    .footer-copyright {
-        color: #6c757d;
-        font-size: 0.85rem;
-        margin-top: 10px;
-    }
-    
-    .footer-copyright a {
-        color: #ff2442;
+    .xh-link {
+        background: rgba(255, 36, 66, 0.15);
+        border-radius: 8px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         text-decoration: none;
+        color: white;
+        border: 1px solid rgba(255, 36, 66, 0.3);
+        transition: all 0.3s ease;
+        font-weight: 500;
     }
     
-    .footer-copyright a:hover {
+    .xh-link:hover {
+        background: rgba(255, 36, 66, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 36, 66, 0.2);
+    }
+    
+    .account-id {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #ffcdd2;
+    }
+    
+    .footer-description {
+        color: #b0b7c3;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        max-width: 600px;
+        margin: 0 auto 15px;
+    }
+    
+    .footer-bottom {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #8a94a6;
+        font-size: 0.85rem;
+    }
+    
+    .copyright a {
+        color: #ff8a9c;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .copyright a:hover {
+        color: #ff2442;
         text-decoration: underline;
+    }
+    
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+        .brand-info {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .brand-title {
+            font-size: 1.3rem;
+        }
+        
+        .xh-link {
+            font-size: 0.9rem;
+            padding: 6px 12px;
+        }
+        
+        .sticky-footer {
+            padding: 20px 0 15px;
+        }
     }
     </style>
     """
     
-    # 注入CSS并渲染
-    st.markdown(simple_css, unsafe_allow_html=True)
+    # 注入CSS样式
+    st.markdown(footer_css, unsafe_allow_html=True)
     
-    st.markdown("---")
-    
+    # 页脚HTML内容
     footer_html = """
-    <div class="simple-footer">
-        <div class="footer-brand">
-            <span>🏭</span>
-            <strong>洋葱头工厂</strong>
-        </div>
-        
-        <div style="margin: 10px 0;">
-            <a href="https://www.xiaohongshu.com/user/profile/5e0554d5000000000100315c" target="_blank" class="footer-xhs">
-                📕 小红书：750922641
-            </a>
-        </div>
-        
-        <div style="color: #666; font-size: 0.9rem; margin: 8px 0;">
-            专注 AI 工具与数据智能
-        </div>
-        
-        <div class="footer-copyright">
-            © 2023 SmartClean • 设计 by 
-            <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank">洋葱头工厂</a>
+    <div class="sticky-footer">
+        <div class="footer-content">
+            <div class="brand-info">
+                <div class="brand-title">
+                    <span>🏭</span> 洋葱头工厂
+                </div>
+                
+                <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank" class="xh-link">
+                    <span>📕</span> 小红书账号：
+                    <span class="account-id">750922641</span>
+                </a>
+            </div>
+            
+            <p class="footer-description">专注 AI 工具与数据智能 • 关注获取更多数据清洗、AI 自动化办公技巧</p>
+            
+            <div class="footer-bottom">
+                <p class="copyright">© 2023 SmartClean • 设计 by <a href="https://www.xiaohongshu.com/user/profile/750922641" target="_blank">洋葱头工厂</a></p>
+                <p style="font-size: 0.8rem; margin-top: 5px; opacity: 0.8;">本地化处理 · 隐私安全 · 零基础友好</p>
+            </div>
         </div>
     </div>
     """
     
+    # 渲染页脚
+    st.markdown("---")
     st.markdown(footer_html, unsafe_allow_html=True)
+
 
 # ============ 主程序 ============
 def main():
@@ -1090,4 +1154,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
