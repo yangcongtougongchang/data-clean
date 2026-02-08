@@ -14,7 +14,7 @@ import io
 import base64
 from datetime import datetime
 import hashlib
-
+from streamlit.components.v1 import html as components_html
 # ============ 页面配置 ============
 st.set_page_config(
     page_title="SmartClean - 智能数据清洗",
@@ -1082,6 +1082,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
